@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>agentsec — Sample Unified Security Scorecard</title>
+  <style>
+    body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 1100px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; background: #fafafa; }
+    h1 { font-size: 26px; margin-bottom: 4px; }
+    .sub { color: #666; margin-bottom: 24px; }
+    .card { background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .scorecard { display: flex; gap: 20px; align-items: center; }
+    .grade-badge { font-size: 48px; font-weight: 800; padding: 10px 24px; border-radius: 12px; background: #ffe3e3; color: #b00020; border: 2px solid #b00020; }
+    .metrics { font-size: 15px; }
+    .domain-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+    .domain-card { background: #f8f9fa; padding: 12px; border-radius: 6px; border: 1px solid #eee; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 10px; }
+    th, td { border-bottom: 1px solid #eee; padding: 10px 8px; text-align: left; vertical-align: top; }
+    th { background: #f4f4f4; font-weight: 600; }
+    code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+    .sev { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 700; }
+    .high { background: #ffe3e3; color: #b00020; }
+    .medium { background: #fff3cd; color: #7a5b00; }
+    .low { background: #e7f0ff; color: #0b4f9c; }
+    .note { background: #eef6ff; border-left: 4px solid #005fb8; padding: 14px 18px; color: #003666; border-radius: 4px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>agentsec — Unified Agent Security Scorecard</h1>
+  <div class="sub">Generated from an automated scan across MCP configs, tool manifests, and GitHub Actions workflows (synthetic test project).</div>
+
+  <div class="card scorecard">
+    <div class="grade-badge">F</div>
+    <div class="metrics">
+      <div style="font-size: 18px; font-weight: 700; color: #111;">Overall Health Score: 0/100 (CRITICAL_RISK)</div>
+      <div style="color: #555; margin-top: 4px;">Multiple high-severity vulnerabilities detected. Immediate remediation required.</div>
+      <div style="margin-top: 8px;">
+        <span class="sev high">8 High</span> &nbsp;
+        <span class="sev medium">3 Medium</span> &nbsp;
+        <span class="sev low">2 Low</span> &nbsp;·&nbsp;
+        <strong>13 total findings</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Domain Audit Breakdown</h3>
+    <div class="domain-bar">
+      <div class="domain-card">
+        <strong>1. MCP Configurations</strong><br>
+        Findings: 3<br>
+        <span style="font-size:12px; color:#666;">High: 3 | Med: 0</span>
+      </div>
+      <div class="domain-card">
+        <strong>2. Tool Manifests</strong><br>
+        Findings: 5<br>
+        <span style="font-size:12px; color:#666;">High: 3 | Med: 1</span>
+      </div>
+      <div class="domain-card">
+        <strong>3. CI/CD Workflows</strong><br>
+        Findings: 5<br>
+        <span style="font-size:12px; color:#666;">High: 2 | Med: 2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0;">Detected Vulnerabilities &amp; Policy Findings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Severity</th>
+          <th>Domain</th>
+          <th>Rule</th>
+          <th>Line</th>
+          <th>Target</th>
+          <th>Security Finding</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>WORKFLOW</code></td>
+        <td><code>FG001</code></td>
+        <td>line 9</td>
+        <td><code>actions/checkout@v4</code></td>
+        <td>Action &#39;actions/checkout@v4&#39; is unpinned. Pin to an exact 40-character commit SHA.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>WORKFLOW</code></td>
+        <td><code>FG002</code></td>
+        <td>line 11</td>
+        <td><code>pull_request_target checkout</code></td>
+        <td>Untrusted PR code checked out inside pull_request_target workflow. Pwn-request vulnerability.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>CONFIG</code></td>
+        <td><code>MC001</code></td>
+        <td>line 1</td>
+        <td><code>unpinned-db</code></td>
+        <td>Unpinned package &#39;unpinned-server-package&#39; executed via npx. Pin to an exact version (@version).</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>CONFIG</code></td>
+        <td><code>MC002</code></td>
+        <td>line 1</td>
+        <td><code>unpinned-db.env.DATABASE_API_KEY</code></td>
+        <td>Hardcoded credential found in env var &#39;DATABASE_API_KEY&#39;. Use environment variable substitution instead.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>CONFIG</code></td>
+        <td><code>MC003</code></td>
+        <td>line 1</td>
+        <td><code>insecure-remote</code></td>
+        <td>Remote server URL &#39;http://api.remote-mcp-server.com/sse&#39; uses unencrypted transport. Use https:// or wss://.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TOOL</code></td>
+        <td><code>TS001</code></td>
+        <td>line 1</td>
+        <td><code>bash</code></td>
+        <td>Tool &#39;bash&#39; description contains prompt-injection instruction text matching /ignore\s+(all\s+)?(previous|prior)\s+instructions/i.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TOOL</code></td>
+        <td><code>TS003</code></td>
+        <td>line 1</td>
+        <td><code>bash.api_key</code></td>
+        <td>Tool &#39;bash&#39; exposes credential parameter &#39;api_key&#39; directly in tool inputs.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TOOL</code></td>
+        <td><code>TS006</code></td>
+        <td>line 1</td>
+        <td><code>bash</code></td>
+        <td>Tool name &#39;bash&#39; impersonates a privileged system utility. Use a namespaced name.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>WORKFLOW</code></td>
+        <td><code>FG004</code></td>
+        <td>line 4</td>
+        <td><code>permissions: write-all</code></td>
+        <td>Workflow grants global write-all permissions. Restrict to minimal contents: read.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>WORKFLOW</code></td>
+        <td><code>FG006</code></td>
+        <td>line 14</td>
+        <td><code>curl | bash</code></td>
+        <td>Remote script piped directly into shell. Verify checksums or vendor scripts locally.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>TOOL</code></td>
+        <td><code>TS004</code></td>
+        <td>line 1</td>
+        <td><code>bash</code></td>
+        <td>Tool &#39;bash&#39; allows unconstrained additionalProperties. Set to false.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev low">LOW</span></td>
+        <td><code>WORKFLOW</code></td>
+        <td><code>FG007</code></td>
+        <td>line 9</td>
+        <td><code>actions/checkout</code></td>
+        <td>actions/checkout does not explicitly disable persist-credentials. Set persist-credentials: false.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev low">LOW</span></td>
+        <td><code>TOOL</code></td>
+        <td><code>TS007</code></td>
+        <td>line 1</td>
+        <td><code>bash.command</code></td>
+        <td>Sensitive input &#39;command&#39; lacks a maxLength boundary.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Executive Security Review Package:</strong>
+    We offer comprehensive fixed-scope code and configuration audits for autonomous agent deployments.
+    Includes full static analysis, threat modeling, SARIF code-scanning integration, and pull-request ready remediation.
+    Learn more: <a href="https://github.com/sidsri14/agentsec">github.com/sidsri14/agentsec</a>
+  </div>
+</body>
+</html>
