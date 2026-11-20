@@ -1,0 +1,31 @@
+name: "agentsec — Unified Agent Security Scorecard"
+description: "Unified security linter & scorecard for autonomous agent apps (MCP configs, tool manifests, GitHub Actions)."
+author: "Siddharth Srivastava"
+branding:
+  icon: "shield"
+  color: "blue"
+inputs:
+  path:
+    description: "Directory or path of agent project files to scan"
+    required: false
+    default: "."
+  format:
+    description: "human | json | sarif"
+    required: false
+    default: "sarif"
+  fail-on:
+    description: "A | B | C | F"
+    required: false
+    default: "C"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+      with:
+        node-version: 20
+    - name: Run agentsec
+      shell: bash
+      run: |
+        node "${{ github.action_path }}/bin/agentsec.js" scan "${{ inputs.path }}" \
+          --format "${{ inputs.format }}" --fail-on "${{ inputs.fail-on }}" > agentsec-report.txt || true
+        cat agentsec-report.txt

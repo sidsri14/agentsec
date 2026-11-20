@@ -84,3 +84,15 @@ test("CLI exit codes correctly report security posture", () => {
   const exitRules = run(["rules"]);
   assert.equal(exitRules, EXIT.OK);
 });
+
+test("action.yml exists and defines valid composite GitHub Action", async () => {
+  const fs = await import("node:fs");
+  const actionPath = path.join(__dirname, "..", "action.yml");
+  assert.ok(fs.existsSync(actionPath), "action.yml must exist at repository root");
+
+  const content = fs.readFileSync(actionPath, "utf8");
+  assert.ok(content.includes("using: \"composite\""));
+  assert.ok(content.includes("bin/agentsec.js"));
+  assert.ok(content.includes("inputs:"));
+});
+
