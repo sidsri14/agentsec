@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm test
+      - name: Self-scan clean project fixture
+        run: node bin/agentsec.js scan test/fixtures/good-project --fail-on C
+      - name: Verify SARIF export validity
+        run: |
+          node bin/agentsec.js scan test/fixtures/bad-project --format sarif > agentsec.sarif || true
+          node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('agentsec.sarif','utf8')); if(s.version!=='2.1.0'||!s.runs[0].results.length) process.exit(1)"
