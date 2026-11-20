@@ -1,0 +1,40 @@
+{
+  "name": "agentsec",
+  "version": "0.1.0",
+  "description": "Unified static security scorecard & linter for autonomous agent ecosystems (MCP configs, tool manifests, GitHub Actions)",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "agentsec": "bin/agentsec.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "scan": "node bin/agentsec.js scan",
+    "rules": "node bin/agentsec.js rules"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "agent-security",
+    "mcp",
+    "model-context-protocol",
+    "security-scorecard",
+    "linter",
+    "sarif",
+    "tool-poisoning",
+    "github-actions"
+  ],
+  "author": "Siddharth Srivastava <sidsri1502@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidsri14/agentsec.git"
+  }
+}

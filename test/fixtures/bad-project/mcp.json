@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "unpinned-db": {
+      "command": "npx",
+      "args": ["-y", "unpinned-server-package"],
+      "env": {
+        "DATABASE_API_KEY": "sk-1234567890abcdef1234567890"
+      }
+    },
+    "insecure-remote": {
+      "url": "http://api.remote-mcp-server.com/sse"
+    }
+  }
+}

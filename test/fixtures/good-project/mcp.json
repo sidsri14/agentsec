@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "pinned-db": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres@0.1.2"],
+      "env": {
+        "PGPORT": "5432"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "search_docs",
+    "description": "Searches documentation articles for relevant keywords and returns excerpts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["query"],
+      "additionalProperties": false
+    }
+  }
+]
