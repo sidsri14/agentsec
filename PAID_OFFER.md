@@ -1,34 +1,32 @@
-# Comprehensive AI Agent & MCP Security Audit (Paid Offer)
+# AI Agent & MCP Static Security Review
 
-This document outlines the fixed-scope paid security audit offering powered by `agentsec` and our open-source security suite (`toolshield`, `mcpguard`, and `flowguard`).
+A scoped review of MCP client configurations, exported tool manifests, or GitHub Actions workflows. The work uses the public `agentsec`, `toolshield`, `mcpguard` and `flowguard` linters, followed by review of their findings and automated checks.
 
-> **Truth in Accounting Notice**: This is a proposed service package and pricing structure. It does NOT represent booked, invoiced, or received income until an engagement is contracted, delivered, and payment has been credited to our verified account.
+## Single-surface review — starting at USD150
 
----
+- One surface: MCP configurations, tool manifests, or GitHub Actions workflows.
+- Up to five configuration/workflow files or ten tool definitions, agreed before work starts.
+- A finding-by-finding report with rule ID, severity, location, context and a concrete suggested fix.
+- The rule-based scorecard, corrected example files and a SARIF 2.1.0 export.
+- One recheck after your changes.
+- Estimated delivery: one week after scope, acceptance checks and the funded milestone are agreed.
 
-## 📦 Package Tiers
+Broader multi-surface or agent-mesh reviews are quoted separately, typically USD250–500. Repository changes, pull requests, deployment and ongoing support require an explicit agreed scope.
 
-### Tier 1: Single Agent / Single Repository Audit ($250 USD)
-- **Scope**: Up to 1 codebase containing MCP configurations, custom tool manifests, and CI/CD workflows.
-- **Deliverables**:
-  1. Full static and architectural scan across all 19 security rules.
-  2. Executive Security Scorecard with Letter Grade (`A+` to `F`) and Risk Assessment.
-  3. Line-by-line remediation diffs and verified PR ready for immediate merge.
-  4. Formatted SARIF export integrated into repository GitHub Actions.
-- **Turnaround**: 24 business hours.
+## What the review establishes
 
-### Tier 2: Agent Mesh / Enterprise Pipeline Audit ($500 USD)
-- **Scope**: Up to 3 interconnected repositories or multi-agent environments.
-- **Deliverables**:
-  1. Everything in Tier 1.
-  2. Cross-tool privilege escalation analysis (preventing daisy-chained prompt injections).
-  3. Pre-debit token budget & rate limit circuit breaker review.
-  4. 30-minute async or video review session covering architectural recommendations.
-- **Turnaround**: 48 business hours.
+The linters check 19 documented rules across three surfaces. Their scores summarize rule matches; they do not measure complete security coverage or certify that a system is secure. Findings need review in the context of the files supplied.
 
----
+This service covers static inspection. It does not include penetration testing, live exploitation, production access, verification of runtime authorization, or a guarantee that prompt injection and other attacks are prevented. Do not send credentials or customer data in an initial inquiry.
 
-## 💳 Payment & Invoicing Terms
-- Accepted payment methods: Verified Bank Wire / Direct Electronic Funds Transfer / PayPal (`sidsri1302@gmail.com`).
-- Upfront milestone or 100% completion on verified PR delivery.
-- Inquiries: Contact Siddharth Srivastava via [GitHub](https://github.com/sidsri14) or [sidsri14.github.io](https://sidsri14.github.io/).
+My background is independent, AI-assisted projects and open-source contributions. I use AI for research, code and drafting, followed by technical review and automated checks. Agree confidentiality and AI-use limits before sharing private material.
+
+## Scope and payment
+
+Send the file types and counts before ordering. We agree the deliverables, acceptance checks, timing and funded milestone before implementation starts.
+
+- [Order or inquire on Contra](https://contra.com/s/RBAMObQB-ai-agent-and-mcp-static-security-review-single-surface). Communication, contracting and payment for Contra engagements stay on Contra.
+- For a separately agreed direct engagement, payment is through PayPal only. Payment details are confirmed privately after terms are agreed.
+- Contact: [sidsri1502@gmail.com](mailto:sidsri1502@gmail.com).
+
+Public examples: [sample report](https://sidsri14.github.io/agentsec/), [source](https://github.com/sidsri14/agentsec).

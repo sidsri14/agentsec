@@ -61,8 +61,8 @@ const html = `<!doctype html>
   <div class="card scorecard">
     <div class="grade-badge">${report.scorecard.grade}</div>
     <div class="metrics">
-      <div style="font-size: 18px; font-weight: 700; color: #111;">Overall Health Score: ${report.scorecard.score}/100 (${report.scorecard.status})</div>
-      <div style="color: #555; margin-top: 4px;">${report.scorecard.description}</div>
+      <div style="font-size: 18px; font-weight: 700; color: #111;">Rule-based Score: ${report.scorecard.score}/100</div>
+      <div style="color: #555; margin-top: 4px;">Static rule matches from a synthetic test project. Review findings in context; this score does not certify security or verify exploitability.</div>
       <div style="margin-top: 8px;">
         <span class="sev high">${report.scorecard.counts.HIGH} High</span> &nbsp;
         <span class="sev medium">${report.scorecard.counts.MEDIUM} Medium</span> &nbsp;
@@ -73,7 +73,7 @@ const html = `<!doctype html>
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0;">Domain Audit Breakdown</h3>
+    <h3 style="margin-top:0;">Static Rule Breakdown</h3>
     <div class="domain-bar">
       <div class="domain-card">
         <strong>1. MCP Configurations</strong><br>
@@ -94,7 +94,7 @@ const html = `<!doctype html>
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0;">Detected Vulnerabilities &amp; Policy Findings</h2>
+    <h2 style="margin-top:0;">Static Rule Findings</h2>
     <table>
       <thead>
         <tr>
@@ -113,10 +113,14 @@ const html = `<!doctype html>
   </div>
 
   <div class="note">
-    <strong>Executive Security Review Package:</strong>
-    We offer comprehensive fixed-scope code and configuration audits for autonomous agent deployments.
-    Includes full static analysis, threat modeling, SARIF code-scanning integration, and pull-request ready remediation.
-    Learn more: <a href="https://github.com/sidsri14/agentsec">github.com/sidsri14/agentsec</a>
+    <strong>AI Agent &amp; MCP Static Security Review — starting at USD150:</strong>
+    One surface, up to five configuration/workflow files or ten tool definitions, with a finding report,
+    corrected examples, SARIF export and one recheck. Estimated delivery is one week after scope and a funded milestone are agreed.
+    Static inspection only; no live exploitation, production access or guarantee of a fully secure system.
+    Independent AI-assisted work, followed by technical review and automated checks.
+    <a href="https://contra.com/s/RBAMObQB-ai-agent-and-mcp-static-security-review-single-surface">Inquire on Contra</a>;
+    communication, contracting and payment for that engagement stay on Contra.
+    <a href="https://github.com/sidsri14/agentsec/blob/main/PAID_OFFER.md">Scope and terms</a>.
   </div>
 </body>
 </html>

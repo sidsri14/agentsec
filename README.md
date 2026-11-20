@@ -32,28 +32,29 @@ node bin/agentsec.js scan .
 
 ---
 
-## 📊 Executive Scorecard
+## 📊 Rule-based Scorecard
 
-When run, `agentsec` evaluates all discovered agent components and emits a unified letter grade and domain breakdown:
+`agentsec` summarizes static rule matches with a letter grade and domain breakdown. The grade is a heuristic, not a security certification. An empty finding list does not establish that the scanned system is secure or free of vulnerabilities.
+
+Selected lines from a no-findings report:
 
 ```text
 ================================================================================
   AGENTSEC UNIFIED SECURITY SCORECARD v0.1.0
 ================================================================================
   Overall Security Grade : [ A+ ]  Score: 100/100
-  Health Status          : SECURE
-  Summary                : Zero critical or high security issues detected. Hardened baseline.
 --------------------------------------------------------------------------------
   DOMAIN AUDIT BREAKDOWN:
     • MCP Configurations    : 0 findings (0 High, 0 Med, 0 Low)
     • Agent Tool Manifests  : 0 findings (0 High, 0 Med, 0 Low)
     • CI/CD Workflows       : 0 findings (0 High, 0 Med, 0 Low)
 --------------------------------------------------------------------------------
-  ✓ Zero security vulnerabilities detected across all scanned agent components.
 ================================================================================
 ```
 
 ---
+
+The CLI also emits status and summary labels. Interpret those labels only within the documented rule set: static checks can miss issues and can flag patterns that are safe in context. Review findings before making changes. Runtime authorization, exploitability and resistance to prompt injection are not verified by this scan.
 
 ## 📋 Rule Catalog (19 Rules Across 3 Domains)
 
