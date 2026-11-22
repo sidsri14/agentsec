@@ -136,6 +136,34 @@ export function scanToolManifest(doc, filePath, rawText = "") {
         startLine: 1,
       });
     }
+
+    // TS008: Excessive description length (> 1,024 chars)
+    if (typeof description === "string" && description.length > 1024) {
+      findings.push({
+        ruleId: "TS008",
+        domain: "TOOL",
+        severity: "LOW",
+        file: filePath,
+        target: name,
+        value: `${description.length} chars`,
+        message: `Tool '${name}' description is excessively long (${description.length} chars > 1,024 max recommended).`,
+        startLine: 1,
+      });
+    }
+
+    // TS009: Non-ASCII or homoglyph character in tool name
+    if (typeof name === "string" && /[^\x20-\x7E]/.test(name)) {
+      findings.push({
+        ruleId: "TS009",
+        domain: "TOOL",
+        severity: "HIGH",
+        file: filePath,
+        target: name,
+        value: name,
+        message: `Tool name '${name}' contains non-ASCII or homoglyph characters.`,
+        startLine: 1,
+      });
+    }
   }
 
   return findings;

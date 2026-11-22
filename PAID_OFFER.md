@@ -15,7 +15,7 @@ Broader multi-surface or agent-mesh reviews are quoted separately, typically USD
 
 ## What the review establishes
 
-The linters check 19 documented rules across three surfaces. Their scores summarize rule matches; they do not measure complete security coverage or certify that a system is secure. Findings need review in the context of the files supplied.
+The linters check 27 documented rules across three surfaces. Their scores summarize rule matches; they do not measure complete security coverage or certify that a system is secure. Findings need review in the context of the files supplied.
 
 This service covers static inspection. It does not include penetration testing, live exploitation, production access, verification of runtime authorization, or a guarantee that prompt injection and other attacks are prevented. Do not send credentials or customer data in an initial inquiry.
 

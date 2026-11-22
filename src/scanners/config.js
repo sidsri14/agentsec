@@ -114,6 +114,96 @@ export function scanMcpConfig(doc, filePath, rawText = "") {
         startLine: 1,
       });
     }
+
+    // MC006: Over-broad filesystem root
+    const serverLabel = `${serverName} ${command} ${args.join(" ")}`.toLowerCase();
+    if (/(filesystem|desktop-commander|file.?system|\bgit\b|\bfiles\b)/i.test(serverLabel)) {
+      for (const arg of args) {
+        if (typeof arg === "string") {
+          const trimmed = arg.trim();
+          if (
+            trimmed === "/" ||
+            trimmed === "~" ||
+            trimmed === "/root" ||
+            trimmed === "/home" ||
+            trimmed === "/Users" ||
+            /^[A-Za-z]:[\\/]?$/.test(trimmed)
+          ) {
+            findings.push({
+              ruleId: "MC006",
+              domain: "CONFIG",
+              severity: "MEDIUM",
+              file: filePath,
+              target: serverName,
+              value: trimmed,
+              message: `Filesystem server granted broad system root '${trimmed}'.`,
+              startLine: 1,
+            });
+          }
+        }
+      }
+    }
+
+    // MC007: Wildcard tool permission
+    const toolPerms = server.tools || server.allowedTools || (server.permissions && server.permissions.tools);
+    if (
+      toolPerms === "*" ||
+      toolPerms === "all" ||
+      (Array.isArray(toolPerms) && (toolPerms.includes("*") || toolPerms.includes("all")))
+    ) {
+      findings.push({
+        ruleId: "MC007",
+        domain: "CONFIG",
+        severity: "MEDIUM",
+        file: filePath,
+        target: serverName,
+        value: String(toolPerms),
+        message: `Wildcard tool permission '${toolPerms}' granted to server '${serverName}'.`,
+        startLine: 1,
+      });
+    }
+
+    // MC008: Hardcoded credential in arguments
+    const SECRET_ARG_RE = /^(--?token|--?api[_-]?key|--?password|--?secret|--?auth)[=:](.+)$/i;
+    for (const arg of args) {
+      if (typeof arg === "string") {
+        const m = arg.match(SECRET_ARG_RE);
+        const candidate = m ? m[2] : arg;
+        if (/^(sk-[a-zA-Z0-9_-]{12,}|ghp_[a-zA-Z0-9]{16,})$/.test(candidate) || (m && candidate.length >= 8)) {
+          findings.push({
+            ruleId: "MC008",
+            domain: "CONFIG",
+            severity: "HIGH",
+            file: filePath,
+            target: serverName,
+            value: maskSecret(candidate),
+            message: `Hardcoded credential found in command-line argument for '${serverName}'.`,
+            startLine: 1,
+          });
+        }
+      }
+    }
+
+    // MC009: Stdio server invokes raw interpreter without script argument
+    const cmd = typeof command === "string" ? command.split(/[\\/]/).pop().toLowerCase() : "";
+    const INTERPRETERS = new Set(["python", "python3", "node", "ruby", "perl", "php"]);
+    if (INTERPRETERS.has(cmd)) {
+      const hasScript = args.some(
+        (a) => typeof a === "string" && !a.startsWith("-") && (a.includes(".") || a.includes("/"))
+      );
+      if (!hasScript) {
+        findings.push({
+          ruleId: "MC009",
+          domain: "CONFIG",
+          severity: "HIGH",
+          file: filePath,
+          target: serverName,
+          value: `${command} ${args.join(" ")}`.trim(),
+          message: `Interpreter '${cmd}' invoked without an explicit script file argument.`,
+          startLine: 1,
+        });
+      }
+    }
   }
 
   return findings;

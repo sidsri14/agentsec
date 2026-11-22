@@ -54,6 +54,38 @@ export const RULES = [
     rationale: "Stdio servers without explicit command or args can produce undefined or platform-dependent execution.",
     remediation: "Specify an explicit binary command and pinned argument list.",
   },
+  {
+    id: "MC006",
+    domain: "CONFIG",
+    severity: "MEDIUM",
+    title: "Over-broad filesystem root granted to server",
+    rationale: "Granting a filesystem-capable MCP server '/', a drive root (e.g. C:\\), or user home directory exposes sensitive host data and configuration files to the agent.",
+    remediation: "Scope the server's allowed directories to specific, dedicated project folders.",
+  },
+  {
+    id: "MC007",
+    domain: "CONFIG",
+    severity: "MEDIUM",
+    title: "Wildcard tool permission in server policy",
+    rationale: "Configuring wildcard ('*' or 'all') permissions grants autonomous agents access to every tool, subverting least-privilege principles.",
+    remediation: "Enumerate explicitly approved tool names rather than wildcard grants.",
+  },
+  {
+    id: "MC008",
+    domain: "CONFIG",
+    severity: "HIGH",
+    title: "Hardcoded credential in server arguments",
+    rationale: "Passing API keys, bearer tokens, or passwords directly in command arguments exposes them to process listings (ps), logs, and diagnostic dumps.",
+    remediation: "Pass credentials via environment variable references or secure secret vaults instead of command-line arguments.",
+  },
+  {
+    id: "MC009",
+    domain: "CONFIG",
+    severity: "HIGH",
+    title: "Stdio server invokes raw interpreter without script argument",
+    rationale: "Launching an interactive interpreter (python, node, ruby, perl) without a script argument starts an interactive REPL that hangs communication or accepts arbitrary code via stdin.",
+    remediation: "Provide an explicit script file or entry point in args (e.g. ['server.py'] or ['dist/index.js']).",
+  },
 
   // --- Domain: TOOL (Tool Manifests & Prompt Injection) ---
   {
@@ -112,6 +144,22 @@ export const RULES = [
     rationale: "Unconstrained string parameters for code, query, or path can be used for denial-of-service or memory exhaustion.",
     remediation: "Add maxLength constraints on open-ended string input schemas.",
   },
+  {
+    id: "TS008",
+    domain: "TOOL",
+    severity: "LOW",
+    title: "Excessive description length (> 1,024 characters)",
+    rationale: "Extremely verbose tool descriptions consume disproportionate model context windows, degrade tool-selection attention, and can be used to hide prompt injections among boilerplate text.",
+    remediation: "Keep tool descriptions concise, focused on tool capabilities, under 1,024 characters.",
+  },
+  {
+    id: "TS009",
+    domain: "TOOL",
+    severity: "HIGH",
+    title: "Non-ASCII or homoglyph character in tool name",
+    rationale: "Tools using look-alike Unicode characters (such as Cyrillic or non-ASCII homoglyphs) can impersonate trusted tools while evading simple string matching and human review.",
+    remediation: "Restrict tool names to ASCII alphanumeric and standard delimiter characters (a-z, 0-9, _, -).",
+  },
 
   // --- Domain: WORKFLOW (GitHub Actions CI/CD) ---
   {
@@ -169,5 +217,21 @@ export const RULES = [
     title: "actions/checkout without persist-credentials: false",
     rationale: "actions/checkout persists the GITHUB_TOKEN in the local git config by default, making it accessible to subsequent build steps.",
     remediation: "Add persist-credentials: false to actions/checkout steps unless subsequent git push actions explicitly require it.",
+  },
+  {
+    id: "FG008",
+    domain: "WORKFLOW",
+    severity: "HIGH",
+    title: "Self-hosted runner used on pull_request or untrusted event",
+    rationale: "Running untrusted pull requests on self-hosted runners exposes internal network infrastructure, host secrets, and container daemons to arbitrary code execution.",
+    remediation: "Use GitHub-hosted runners (ubuntu-latest) for pull requests from untrusted forks or require an environment gate.",
+  },
+  {
+    id: "FG009",
+    domain: "WORKFLOW",
+    severity: "MEDIUM",
+    title: "Workflow missing explicit top-level permissions block",
+    rationale: "A workflow without a top-level permissions: block inherits the repository's default GITHUB_TOKEN permissions, which may grant write access to issues, checks, or contents.",
+    remediation: "Define an explicit top-level 'permissions: contents: read' block to enforce least privilege.",
   },
 ];

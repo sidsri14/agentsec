@@ -56,7 +56,7 @@ Selected lines from a no-findings report:
 
 The CLI also emits status and summary labels. Interpret those labels only within the documented rule set: static checks can miss issues and can flag patterns that are safe in context. Review findings before making changes. Runtime authorization, exploitability and resistance to prompt injection are not verified by this scan.
 
-## 📋 Rule Catalog (19 Rules Across 3 Domains)
+## 📋 Rule Catalog (27 Rules Across 3 Domains)
 
 | ID | Domain | Severity | Title |
 |---|---|---|---|
@@ -65,6 +65,10 @@ The CLI also emits status and summary labels. Interpret those labels only within
 | **MC003** | `CONFIG` | HIGH | Cleartext HTTP / WS remote MCP endpoint |
 | **MC004** | `CONFIG` | MEDIUM | Dangerous command flag in server arguments |
 | **MC005** | `CONFIG` | LOW | Missing explicit command in stdio server config |
+| **MC006** | `CONFIG` | MEDIUM | Over-broad filesystem root granted to server |
+| **MC007** | `CONFIG` | MEDIUM | Wildcard tool permission in server policy |
+| **MC008** | `CONFIG` | HIGH | Hardcoded credential in server arguments |
+| **MC009** | `CONFIG` | HIGH | Stdio server invokes raw interpreter without script argument |
 | **TS001** | `TOOL` | HIGH | Instruction-like prompt injection text in tool description |
 | **TS002** | `TOOL` | HIGH | Invisible Unicode control characters in tool metadata |
 | **TS003** | `TOOL` | HIGH | Credential or secret in tool input parameters |
@@ -72,6 +76,8 @@ The CLI also emits status and summary labels. Interpret those labels only within
 | **TS005** | `TOOL` | MEDIUM | Read-only named tool performs mutation or execution |
 | **TS006** | `TOOL` | HIGH | Tool name impersonates a system built-in (bash, sudo) |
 | **TS007** | `TOOL` | LOW | Sensitive string parameter lacks length constraint |
+| **TS008** | `TOOL` | LOW | Excessive description length (> 1,024 characters) |
+| **TS009** | `TOOL` | HIGH | Non-ASCII or homoglyph character in tool name |
 | **FG001** | `WORKFLOW` | HIGH | Unpinned GitHub Action referenced by mutable ref |
 | **FG002** | `WORKFLOW` | HIGH | pull_request_target trigger combined with untrusted PR checkout |
 | **FG003** | `WORKFLOW` | HIGH | Untrusted event data interpolated directly into shell script |
@@ -79,6 +85,8 @@ The CLI also emits status and summary labels. Interpret those labels only within
 | **FG005** | `WORKFLOW` | HIGH | Hardcoded secret or credential in workflow env block |
 | **FG006** | `WORKFLOW` | MEDIUM | Remote script piped directly into shell |
 | **FG007** | `WORKFLOW` | LOW | actions/checkout without persist-credentials: false |
+| **FG008** | `WORKFLOW` | HIGH | Self-hosted runner used on pull_request or untrusted event |
+| **FG009** | `WORKFLOW` | MEDIUM | Workflow missing explicit top-level permissions block |
 
 ---
 

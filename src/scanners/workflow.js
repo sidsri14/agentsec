@@ -143,6 +143,36 @@ export function scanWorkflow(rawContent, filePath) {
         });
       }
     }
+
+    // FG008: Self-hosted runner used on untrusted event
+    if (/(pull_request|pull_request_target|issues|issue_comment)/i.test(rawContent)) {
+      if (/runs-on:\s*(\[.*self-hosted.*\]|self-hosted)/i.test(line)) {
+        findings.push({
+          ruleId: "FG008",
+          domain: "WORKFLOW",
+          severity: "HIGH",
+          file: filePath,
+          target: "runs-on",
+          value: trimmed,
+          message: `Self-hosted runner used on untrusted PR or issue event.`,
+          startLine: lineNum,
+        });
+      }
+    }
+  }
+
+  // FG009: Missing explicit top-level permissions block
+  if (!/^\s*permissions\s*:/m.test(rawContent)) {
+    findings.push({
+      ruleId: "FG009",
+      domain: "WORKFLOW",
+      severity: "MEDIUM",
+      file: filePath,
+      target: "permissions",
+      value: "(missing permissions)",
+      message: `Workflow lacks an explicit top-level permissions block. Enforce least privilege with permissions: contents: read.`,
+      startLine: 1,
+    });
   }
 
   return findings;

@@ -8,13 +8,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BAD_PROJECT = path.join(__dirname, "fixtures", "bad-project");
 const GOOD_PROJECT = path.join(__dirname, "fixtures", "good-project");
 
-test("RULES has 19 unique registered rules across 3 domains", () => {
-  assert.equal(RULES.length, 19);
+test("RULES has 27 unique registered rules across 3 domains", () => {
+  assert.equal(RULES.length, 27);
   const domains = new Set(RULES.map((r) => r.domain));
   assert.deepEqual([...domains].sort(), ["CONFIG", "TOOL", "WORKFLOW"]);
 
   const ids = new Set(RULES.map((r) => r.id));
-  assert.equal(ids.size, 19);
+  assert.equal(ids.size, 27);
 });
 
 test("bad-project triggers findings across all three domains", () => {
@@ -94,5 +94,89 @@ test("action.yml exists and defines valid composite GitHub Action", async () => 
   assert.ok(content.includes("using: \"composite\""));
   assert.ok(content.includes("bin/agentsec.js"));
   assert.ok(content.includes("inputs:"));
+});
+
+test("new CONFIG rules MC006, MC007, MC008, MC009 detect vulnerabilities", async () => {
+  const { scanMcpConfig } = await import("../src/scanners/config.js");
+
+  // MC006: broad filesystem root
+  const fsConfig = {
+    mcpServers: {
+      files: { command: "npx", args: ["-y", "@modelcontextprotocol/server-filesystem", "/"] }
+    }
+  };
+  const fsRes = scanMcpConfig(fsConfig, "test-mcp.json");
+  assert.ok(fsRes.some((f) => f.ruleId === "MC006"), "Should detect MC006 broad filesystem root");
+
+  // MC007: wildcard tool permissions
+  const wildcardConfig = {
+    mcpServers: {
+      alltools: { command: "node", args: ["dist/server.js"], tools: ["*"] }
+    }
+  };
+  const wcRes = scanMcpConfig(wildcardConfig, "test-mcp.json");
+  assert.ok(wcRes.some((f) => f.ruleId === "MC007"), "Should detect MC007 wildcard tool permission");
+
+  // MC008: hardcoded secret in args
+  const secretArgConfig = {
+    mcpServers: {
+      authServer: { command: "node", args: ["dist/server.js", "--api-key=sk-ant-api03-abcdef123456789"] }
+    }
+  };
+  const saRes = scanMcpConfig(secretArgConfig, "test-mcp.json");
+  assert.ok(saRes.some((f) => f.ruleId === "MC008"), "Should detect MC008 secret in args");
+
+  // MC009: raw interpreter without script
+  const rawPyConfig = {
+    mcpServers: {
+      repl: { command: "python3", args: ["-u"] }
+    }
+  };
+  const pyRes = scanMcpConfig(rawPyConfig, "test-mcp.json");
+  assert.ok(pyRes.some((f) => f.ruleId === "MC009"), "Should detect MC009 raw interpreter without script");
+});
+
+test("new TOOL rules TS008, TS009 detect length and homoglyphs", async () => {
+  const { scanToolManifest } = await import("../src/scanners/tool.js");
+
+  // TS008: excessive description
+  const longTool = [
+    {
+      name: "verbose_tool",
+      description: "A".repeat(1050),
+      inputSchema: { type: "object", properties: {} }
+    }
+  ];
+  const t8Res = scanToolManifest(longTool, "tools.json");
+  assert.ok(t8Res.some((f) => f.ruleId === "TS008"), "Should detect TS008 excessive description length");
+
+  // TS009: non-ASCII / homoglyph tool name
+  const spoofedTool = [
+    {
+      name: "bаsh", // Cyrillic а (U+0430)
+      description: "A normal shell utility.",
+      inputSchema: { type: "object", properties: {} }
+    }
+  ];
+  const t9Res = scanToolManifest(spoofedTool, "tools.json");
+  assert.ok(t9Res.some((f) => f.ruleId === "TS009"), "Should detect TS009 non-ASCII character in name");
+});
+
+test("new WORKFLOW rules FG008, FG009 detect self-hosted and missing permissions", async () => {
+  const { scanWorkflow } = await import("../src/scanners/workflow.js");
+
+  // FG008: self-hosted on pull_request
+  const selfHostedYml = `
+name: Untrusted PR
+on: pull_request
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - run: npm test
+`;
+  const shRes = scanWorkflow(selfHostedYml, ".github/workflows/pr.yml");
+  assert.ok(shRes.some((f) => f.ruleId === "FG008"), "Should detect FG008 self-hosted runner");
+  assert.ok(shRes.some((f) => f.ruleId === "FG009"), "Should detect FG009 missing permissions block");
 });
 
